@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.routes.documents import router as documents_router
+
 app = FastAPI()
+
+app.include_router(documents_router, prefix="/documents") 
 
 app.add_middleware(
     CORSMiddleware,
