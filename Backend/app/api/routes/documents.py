@@ -21,18 +21,14 @@ async def upload_document(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        chunks = ingest_documents(str(file_path))
-
-        logger.info(
-            "Document '%s' ingested successfully. Created %d chunks.",
-            file.filename,
-            len(chunks),
-        )
+        stats = ingest_documents(str(file_path))
 
         return {
-            "filename": file.filename,
-            "saved_path": str(file_path),
-            "chunks": len(chunks)
+            "message": "Document ingested successfully",
+            "document_id": stats["document_id"],
+            "filename": stats["filename"],
+            "chunks_created": stats["chunks_created"],
+            "vectors_stored": stats["vectors_stored"]
         }
     finally:
         file_path.unlink(missing_ok=True)  # Clean up the uploaded file after processing
