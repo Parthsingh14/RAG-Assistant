@@ -1,8 +1,11 @@
 from dotenv import load_dotenv
-load_dotenv()
 
 from app.rag.embeddings.embedding_service import EmbeddingService
 from app.rag.vectorestore.pinecone_store import PineconeStore
+from app.rag.prompts.rag_prompt import RAG_PROMPT
+from app.rag.llm.llm_service import LLMService
+
+load_dotenv()
 
 def build_context(results):
     context_parts = []
@@ -28,30 +31,30 @@ def build_context(results):
     return context, sources
 
 
-question = "What subjects are included in Gate Computer Science?"
+question = "What is the syllabus of NEET exam?"
 
 embedding_service = EmbeddingService()
-pinecone_service = PineconeStore()
+pinecone_store = PineconeStore()
+llm_service = LLMService()
 
 query_vector = embedding_service.embed_query(question)
 
-results = pinecone_service.search(query_vector=query_vector, top_k=3)
+results = pinecone_store.search(query_vector=query_vector, top_k=3)
 
-# Build context and sources
-context, sources = build_context(results)
+context , sources = build_context(results)
 
-for result in results:
-    print(
-        f"\n Score: {result['score']}"
-        f"\n Filename: {result['filename']}"
-        f"\n Page: {result['page_number']}"
-        f"\n Text: {result['text']}"
-    )
+prompt = RAG_PROMPT.invoke({
+    "context": context,
+    "question": question
+})
 
-print("\n===== CONTEXT =====")
-print(context)
+response = llm_service.generate(prompt)
 
+print("\n===== QUESTION =====")
+print(question)
 
-# Display sources
+print("\n===== ANSWER =====")
+print(response.content)
+
 print("\n===== SOURCES =====")
 print(sources)
