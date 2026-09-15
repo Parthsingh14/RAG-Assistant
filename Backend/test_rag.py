@@ -4,6 +4,7 @@ from app.rag.embeddings.embedding_service import EmbeddingService
 from app.rag.vectorestore.pinecone_store import PineconeStore
 from app.rag.prompts.rag_prompt import RAG_PROMPT
 from app.rag.llm.llm_service import LLMService
+from app.services.retrieval_service import RetrievalService
 
 load_dotenv()
 
@@ -32,14 +33,10 @@ def build_context(results):
 
 
 question = "What is the syllabus of NEET exam?"
-
-embedding_service = EmbeddingService()
-pinecone_store = PineconeStore()
+retrieval_service = RetrievalService()
 llm_service = LLMService()
 
-query_vector = embedding_service.embed_query(question)
-
-results = pinecone_store.search(query_vector=query_vector, top_k=3)
+results = retrieval_service.retrieve(question=question,top_k=3)
 
 context , sources = build_context(results)
 
