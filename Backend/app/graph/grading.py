@@ -5,7 +5,7 @@ from app.rag.llm.llm_service import LLMService
 def create_grading_node(llm_service: LLMService):
 
     def grade_documents(state: GraphState) -> dict:
-        question = state["question"]
+        question = state.get("rewritten_question") or state["question"]
         documents = state["documents"]
 
         # Build the retrieved context here
