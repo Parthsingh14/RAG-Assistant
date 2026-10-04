@@ -7,13 +7,14 @@ class RetrievalService:
         self.embedding_service = EmbeddingService()
         self.pinecone_store = PineconeStore()
 
-    def retrieve(self, question: str, top_k: int = 3):
+    def retrieve(self, question: str, top_k: int = 3, filter: dict | None = None):
 
         query_vector = self.embedding_service.embed_query(question)
 
         results = self.pinecone_store.search(
             query_vector=query_vector,
-            top_k=top_k
+            top_k=top_k,
+            filter = filter
         )
 
         return results

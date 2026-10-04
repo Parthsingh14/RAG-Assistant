@@ -4,9 +4,9 @@ from app.services.retrieval_service import RetrievalService
 retrieval_service = RetrievalService()
 
 questions = [
-    "WHat is the syllabus of DBMS in gate?",
-    "Give me the full syllabus of GATE.",
-    "Who is the PM of Pakistan?",
+    "What is my GATE score?",
+    # "Give me the full syllabus of GATE.",
+    # "Who is the PM of Pakistan?",
 ]
 
 for question in questions:

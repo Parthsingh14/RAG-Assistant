@@ -20,11 +20,12 @@ class PineconeStore:
     def upsert_vectors(self, vectors):
         self.index.upsert(vectors = vectors)
 
-    def search(self, query_vector: list[float], top_k: int = 3):
+    def search(self, query_vector: list[float], top_k: int = 3, filter: dict | None = None):
         results = self.index.query(
             vector = query_vector,
             top_k = top_k,
-            include_metadata = True
+            include_metadata = True,
+            filter = filter
         )
 
         return [
