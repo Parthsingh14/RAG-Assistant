@@ -6,23 +6,26 @@ from app.services.retrieval_service import RetrievalService
 
 retrieval_service = RetrievalService()
 
-question = "What is the syllabus of GATE?"
+question = "What projects are mentioned in my resume?"
 
-results = retrieval_service.retrieve_mmr(
-    question=question,
-    k=3,
-    fetch_k=8,
-    lambda_mult=0.5
-)
+lamba_mult_values = [0.5,0.7,0.8]
 
-print("=" * 70)
-print(f"Question: {question}")
-print("Strategy: MMR")
-print("=" * 70)
+for lambda_mult in lamba_mult_values:
+    results = retrieval_service.retrieve_mmr(
+        question=question,
+        k=3,
+        fetch_k=8,
+        lambda_mult=lambda_mult
+    )
 
-for i, result in enumerate(results, start=1):
-    print(f"\nResult {i}")
-    print(f"Score: {result['score']}")
-    print(f"File: {result['filename']}")
-    print(f"Chunk: {result['chunk_index']}")
-    print(f"Text: {result['text']}")
+    print("=" * 70)
+    print(f"Question: {question}")
+    print(f"Strategy: MMR with lambda_mult={lambda_mult}")
+    print("=" * 70)
+
+    for i, result in enumerate(results, start=1):
+        print(f"\nResult {i}")
+        print(f"Score: {result['score']}")
+        print(f"File: {result['filename']}")
+        print(f"Chunk: {result['chunk_index']}")
+        print(f"Text: {result['text']}")
